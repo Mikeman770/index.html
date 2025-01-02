@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic Yu-Gi-Oh! Slot Machine</title>
+    <style>
+        body {
+            font-family: "Trebuchet MS", sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #1e1e2e, #0d0d1a);
+            color: white;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        h1 {
+            text-shadow: 0 0 10px #f44336, 0 0 20px #ff5733;
+        }
+        .slot-machine {
+            width: 80%;
+            max-width: 400px;
+            padding: 20px;
+            border: 3px solid #444;
+            border-radius: 15px;
+            background-color: #222;
+            box-shadow: 0 0 15px #f44336;
+            overflow: hidden;
+            position: relative;
+        }
+        .reels {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+        }
+        .reel {
+            width: 80px;
+            height: 80px;
+            font-size: 2.5rem;
+            border: 2px solid #333;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #111;
+            box-shadow: inset 0 0 5px #000;
+            animation: none;
+        }
+        .spin-button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            color: white;
+            background-color: #ff5733;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .spin-button:hover {
+            background-color: #f44336;
+        }
+        .win-message {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 5px #ffeb3b;
+        }
+        @keyframes spin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-500%); }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎰 Epic Yu-Gi-Oh! Slot Machine 🎰</h1>
+    <div class="slot-machine">
+        <div class="reels">
+            <div class="reel" id="reel1">🃏</div>
+            <div class="reel" id="reel2">🐉</div>
+            <div class="reel" id="reel3">🌟</div>
+        </div>
+        <button class="spin-button" onclick="spin()">Spin</button>
+        <div class="win-message" id="result"></div>
+    </div>
+    <script>
+        const symbols = ["🃏", "🐉", "🌟", "🔥", "💎"];
+        const reelElements = [document.getElementById("reel1"), document.getElementById("reel2"), document.getElementById("reel3")];
+        const resultElement = document.getElementById("result");
+
+        function spin() {
+            // Clear result message
+            resultElement.textContent = "";
+            resultElement.style.color = "white";
+
+            // Start spinning animation
+            reelElements.forEach(reel => {
+                reel.style.animation = "spin 1s linear";
+                setTimeout(() => {
+                    reel.style.animation = ""; // Reset animation
+                }, 1000);
+            });
+
+            // Generate results after spinning
+            setTimeout(() => {
+                const results = reelElements.map(() => symbols[Math.floor(Math.random() * symbols.length)]);
+                reelElements.forEach((reel, i) => reel.textContent = results[i]);
+
+                // Determine win/loss
+                if (results[0] === results[1] && results[1] === results[2]) {
+                    resultElement.textContent = "🎉 JACKPOT! You matched all three symbols! 🎉";
+                    resultElement.style.color = "#ffeb3b";
+                } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+                    resultElement.textContent = "✨ Small win! You matched two symbols! ✨";
+                    resultElement.style.color = "#add8e6";
+                } else {
+                    resultElement.textContent = "Better luck next time!";
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
